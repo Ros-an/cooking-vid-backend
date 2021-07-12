@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const initiateDbConnection = () => {
+function initiateDbConnection () {
   mongoose.connect(process.env.MONGODB_URI,{
       useNewUrlParser: true,
       useCreateIndex: true,
