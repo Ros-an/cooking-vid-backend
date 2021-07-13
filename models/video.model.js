@@ -15,7 +15,7 @@ const videoSchema = new mongoose.Schema({
   likes: [{type: ObjectId, ref: "User"}]
 });
 
-const Video = mongoose.model("Video", videoSchema);
+module.exports = mongoose.model("Video", videoSchema);
 
 // function fillDB() {
 //   try {
@@ -31,4 +31,4 @@ const Video = mongoose.model("Video", videoSchema);
 
 
 
-module.exports = {Video};
+// module.exports = {Video};

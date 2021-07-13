@@ -13,6 +13,7 @@ const {initiateDbConnection} = require("./db/database_connection");
 const videoRoutes = require("./routes/video.route");
 const authRoutes = require("./routes/auth.route");
 const playlistRoutes = require("./routes/playlist.route");
+const userRoutes = require("./routes/user.route");
 // const {fillDB} = require("./models/video.model");
 
 // inititate connection
@@ -26,6 +27,7 @@ app.use(express.json());
 app.use("/api", videoRoutes);
 app.use("/api", authRoutes);
 app.use("/api/playlist", playlistRoutes);
+app.use("/api", userRoutes);
 
 app.get('/', (req, res) => {
   res.send('Hello Express, today I will code backend for cookingvid!')
