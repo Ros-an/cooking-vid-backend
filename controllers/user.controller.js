@@ -5,12 +5,11 @@ const Video = require("../models/video.model");
 
 exports.getUserExploredData = async (req, res) => {
   try {
-    const {likedVideo, watchLater, history} = await User.findById(req.body.userId).populate("likedVideo watchLater history").select("likedVideo watchLater history");
+    const {user_id} = req.params;
+    const {likedVideo, watchLater, history} = await User.findById(user_id).populate("likedVideo watchLater history").select("likedVideo watchLater history");
     res.status(201).json({
       success: true,
-      likedVideo, 
-      watchLater, 
-      history
+      likedVideo, watchLater, history
     })
   }catch(err){
     res.status(400).json({
@@ -20,23 +19,6 @@ exports.getUserExploredData = async (req, res) => {
     });
   }
 }
-exports.saveToLike = async (req, res) => {
-  try {
-    const data = await User.findById(req.body.userId).populate("likedVideo watchLater history").select("likedVideo watchLater history");
-    res.status(201).json({
-      success: true,
-      data
-    })
-  }catch(err){
-    res.status(400).json({
-      success: false,
-      message: "problem occurred during updation, for more see error message",
-      errorMessage: err.message,
-    });
-  }
-}
-
-
 
 exports.saveToLike = async (req, res) => {
   try {

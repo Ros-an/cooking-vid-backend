@@ -3,12 +3,12 @@ const Playlist =  require("../models/playlist.model");
 // get all the list of playlist
 exports.getPlaylist = async(req, res) => {
   try{
-    const {userId} = req.body;
-    const playlist = await Playlist.findOne({userId});
-    if(playlist){
+    const {user_id} = req.params;
+    const list = await Playlist.findOne({userId:user_id});
+    if(list){
       res.status(200).json({
         success: true,
-        playlist
+        playlist: list.playlist
       })
     }else {
       res.status(400).json({
@@ -34,7 +34,7 @@ exports.addPlaylist = async (req, res) => {
       {$push : {playlist: playlist}}, {new: true});
       res.status(201).json({
         success: true,
-        playlist: list
+        playlist: list.playlist
       }) 
     }else{
       const newPlaylist = new Playlist({userId, playlist});
@@ -65,7 +65,7 @@ exports.singleListOfPlaylist = async (req, res) => {
     });
     res.status(200).json({
       success: true,
-      playlist: data
+      playlist: data.playlist
     })
   }catch(err){
     res.status(400).json({
@@ -84,31 +84,12 @@ exports.addToListOfPlaylist = async (req, res) => {
     const list =  await Playlist.findOneAndUpdate({"userId": userId, "playlist._id": playlistId}, {"$addToSet":{"playlist.$.list": video}}, {new: true}); 
     res.status(201).json({
       success: true,
-      playlist: list
+      playlist: list.playlist
     })
   }catch(err){
     res.status(500).json({
       success: false,
       message: "could not add video to list",
-      errorMessage: err.message
-    })
-  }
-}
-
-// remove list from playlist
-
-exports.deleteListOfPlaylist = async (req, res) => {
-  try{
-    const {userId, playlistId} = req.params;
-    const updatePlaylist = await Playlist.findOneAndUpdate({userId}, {$pull: {playlist: {_id: playlistId}}}, {new: true});
-    res.status(200).json({
-      success: true,
-      playlist: updatePlaylist
-    })
-  }catch(err){
-    res.status(500).json({
-      success: false,
-      message: "could not delete that list, for reason check errorMessage",
       errorMessage: err.message
     })
   }
@@ -122,12 +103,29 @@ exports.removeVideoFromList = async(req, res) => {
     const updatedList = await Playlist.findOneAndUpdate({"userId":  userId, "playlist._id": playlistId},{ "$pull": {"playlist.$.list": {"_id": videoId}}}, {new: true});
     res.status(201).json({
       success: true,
-      playlist: updatedList
+      playlist: updatedList.playlist
     })
   }catch(err){
     res.status(500).json({
       success: false,
       message: "could not remove video form list",
+      errorMessage: err.message
+    })
+  }
+}
+// remove list from playlist
+exports.deleteListOfPlaylist = async (req, res) => {
+  try{
+    const {userId, playlistId} = req.params;
+    const updatePlaylist = await Playlist.findOneAndUpdate({userId}, {$pull: {playlist: {_id: playlistId}}}, {new: true});
+    res.status(200).json({
+      success: true,
+      playlist: updatePlaylist.playlist
+    })
+  }catch(err){
+    res.status(500).json({
+      success: false,
+      message: "could not delete that list, for reason check errorMessage",
       errorMessage: err.message
     })
   }

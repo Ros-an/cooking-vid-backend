@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const { saveToLike, saveToWatchLater, saveToHistory, removeFromLike, removeFromWatchLater, removeFromHistory, getUserExploredData } = require("../controllers/user.controller");
-router.get("/like_watch_history", getUserExploredData)
+router.get("/:user_id/like_watch_history", getUserExploredData)
 router.post("/like", saveToLike);
 router.post("/watch_later", saveToWatchLater);
 router.post("/history", saveToHistory);
